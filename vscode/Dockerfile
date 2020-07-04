@@ -20,6 +20,8 @@ COPY vscode.extensions /root/vscode.extensions
 # Setup base system
 ARG BUILD_ARCH=amd64
 # hadolint ignore=SC2181
+#
+COPY --from=linuxserver/code-server /usr/bin/code-server /usr/local/bin/code-server
 RUN \
     apt-get update \
     \
@@ -49,15 +51,15 @@ RUN \
     \
     && if [[ "${BUILD_ARCH}" = "aarch64" ]]; then ARCH="arm64"; fi \
     && if [[ "${BUILD_ARCH}" = "amd64" ]]; then ARCH="amd64"; fi \
-    && curl -J -L -o /tmp/code.tar.gz \
-        "https://github.com/cdr/code-server/releases/download/v3.4.0/code-server-3.4.0-linux-${ARCH}.tar.gz" \
-    && mkdir -p /usr/local/lib/code-server \
-    && tar zxvf \
-        /tmp/code.tar.gz \
-        --strip 1 -C /usr/local/lib/code-server \
-    \
-    && ln -s /usr/local/lib/code-server/bin/code-server /usr/local/bin/code-server \
-    \
+    #&& curl -J -L -o /tmp/code.tar.gz \
+    #    "https://github.com/cdr/code-server/releases/download/v3.4.0/code-server-3.4.0-linux-${ARCH}.tar.gz" \
+    #&& mkdir -p /usr/local/lib/code-server \
+    #&& tar zxvf \
+    #    /tmp/code.tar.gz \
+    #    --strip 1 -C /usr/local/lib/code-server \
+    #\
+    #&& ln -s /usr/local/lib/code-server/bin/code-server /usr/local/bin/code-server \
+    #\
     && mkdir -p /root/.code-server/extensions \
     && while read -r ext; do  \
         extention="${ext%%#*}" \
