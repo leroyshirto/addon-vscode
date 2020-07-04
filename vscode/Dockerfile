@@ -61,24 +61,24 @@ RUN \
     #&& ln -s /usr/local/lib/code-server/bin/code-server /usr/local/bin/code-server \
     #\
     && mkdir -p /root/.code-server/extensions \
-    && while read -r ext; do  \
-        extention="${ext%%#*}" \
-        vendor="${extention%%.*}"; \
-        slug="${extention#*.}"; \
-        version="${ext##*#}"; \
-        \
-        echo "Installing vscode extension: ${slug} by ${vendor} @ ${version} "; \
-        \
-        echo "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${vendor}/vsextensions/${slug}/${version}/vspackage"; \
-        curl -JL --retry 5 -o "/tmp/${extention}-${version}.vsix" \
-            -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" \
-            "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${vendor}/vsextensions/${slug}/${version}/vspackage"; \
-        mkdir -p "/root/.code-server/extensions/${extention}-${version}"; \
-        bsdtar --strip-components=1 -xf "/tmp/${extention}-${version}.vsix" \
-                    -C "/root/.code-server/extensions/${extention}-${version}" extension; \
-        [ $? -ne 0 ] && exit 1; \
-        sleep 180; \
-    done < /root/vscode.extensions \
+    # && while read -r ext; do  \
+    #     extention="${ext%%#*}" \
+    #     vendor="${extention%%.*}"; \
+    #     slug="${extention#*.}"; \
+    #     version="${ext##*#}"; \
+    #     \
+    #     echo "Installing vscode extension: ${slug} by ${vendor} @ ${version} "; \
+    #     \
+    #     echo "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${vendor}/vsextensions/${slug}/${version}/vspackage"; \
+    #     curl -JL --retry 5 -o "/tmp/${extention}-${version}.vsix" \
+    #         -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" \
+    #         "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${vendor}/vsextensions/${slug}/${version}/vspackage"; \
+    #     mkdir -p "/root/.code-server/extensions/${extention}-${version}"; \
+    #     bsdtar --strip-components=1 -xf "/tmp/${extention}-${version}.vsix" \
+    #                 -C "/root/.code-server/extensions/${extention}-${version}" extension; \
+    #     [ $? -ne 0 ] && exit 1; \
+    #     sleep 180; \
+    # done < /root/vscode.extensions \
     && ls -la /root/.code-server/extensions/ \
     \
     && curl -L -s -o /usr/bin/ha \
